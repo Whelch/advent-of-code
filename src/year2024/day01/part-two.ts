@@ -14,10 +14,9 @@ pairs.forEach(([left, right]) => {
 });
 
 const leftSorted = leftList.toSorted((a, b) => a - b);
-const rightSorted = rightList.toSorted((a, b) => a - b);
 
-const diffs = leftSorted.map((left, index) => {
-  return Math.abs(left - rightSorted[index]);
-});
+const occurrences = leftSorted.map((left) => rightList.filter((right) => right === left).length);
 
-console.log(sum(diffs));
+const val = leftSorted.map((left, index) => left * occurrences[index]);
+
+console.log(sum(val));

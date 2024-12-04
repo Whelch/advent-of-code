@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "target": "ES6",
     "esModuleInterop": true,
+    "importHelpers": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es6",
     "moduleResolution": "node",
-    "baseUrl": "."
+    "baseUrl": "./",
+    "rootDir": ".",
+    "lib": ["esnext"]
   }
 }
