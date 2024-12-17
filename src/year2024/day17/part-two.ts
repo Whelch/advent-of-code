@@ -85,7 +85,7 @@ function validateOutput(state: ProgramState) {
   return true;
 }
 
-function newProgram(currentOutput: string[], testBits: number): ProgramState {
+function newProgram(testBits: number, currentOutput: string[]): ProgramState {
   const outputNumber = parseInt(currentOutput.join(''), 2) || 0;
 
   return {
@@ -95,26 +95,28 @@ function newProgram(currentOutput: string[], testBits: number): ProgramState {
   };
 }
 
-const outputs: string[] = [];
-let testBits = 0;
-
-while (outputs.length < program.length) {
-  const state = newProgram(outputs, testBits);
-
+function runProgram(state: ProgramState) {
   while (state.pointer < program.length) {
     performOperation(state);
   }
-
-  if (validateOutput(state)) {
-    outputs.push(testBits.toString(2).padStart(3, '0'));
-    testBits = 0;
-  } else {
-    testBits++;
-
-    if (testBits === 8) {
-      testBits = parseInt(outputs.pop(), 2) + 1;
-    }
-  }
 }
 
-console.log(parseInt(outputs.join(''), 2));
+function recursion(testBits: number, outputs: string[]): string[] {
+  if (testBits === 8 || outputs.length === program.length) {
+    return outputs;
+  }
+
+  const programState = newProgram(testBits, outputs);
+  runProgram(programState);
+
+  if (validateOutput(programState)) {
+    const result = recursion(0, [...outputs, testBits.toString(2).padStart(3, '0')]);
+    if (result.length === program.length) {
+      return result;
+    }
+  }
+
+  return recursion(testBits + 1, outputs);
+}
+
+console.log(parseInt(recursion(0, []).join(''), 2));
